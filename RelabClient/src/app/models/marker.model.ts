@@ -14,5 +14,48 @@ export class Marker {
             this.icon = { url: './assets/img/toilet-paper-16.ico' };
              this.label = "";
         }
+
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/facebook-like-16.ico' };
+             this.label = "";
+        }
+
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/house-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/internet-explorer-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/laptop-4-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/pickup-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/pizza-3-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/planet-16.ico' };
+             this.label = "";
+        }
+        if(this.label.includes(""))
+        {
+            this.icon = { url: './assets/img/robot-16.ico' };
+             this.label = "";
+        }
+
     }
   }
