@@ -5,57 +5,54 @@ export class Marker {
    //l’etichetta
     constructor(public lat: number, public lng: number, public label?: string)
     {
-        if (this.label.includes("Gas")) {
-            this.icon = { url: './assets/img/robot-16.ico' };
+        if (this.label.includes("naturale")) {
+            this.icon = { url: './assets/img/fire-extinguisher-48.ico' };
              this.label = "";
         }
         if(this.label.includes("elettrica"))
         {
-            this.icon = { url: './assets/img/toilet-paper-16.ico' };
+            this.icon = { url: './assets/img/flash-48.ico' };
              this.label = "";
         }
-
-        if(this.label.includes(""))
+        if(this.label.includes("solide"))
         {
-            this.icon = { url: './assets/img/facebook-like-16.ico' };
+            this.icon = { url: './assets/img/tree-45-48.ico' };
              this.label = "";
         }
-
-        if(this.label.includes(""))
+        if(this.label.includes("Olio"))
         {
-            this.icon = { url: './assets/img/house-16.ico' };
+            this.icon = { url: './assets/img/toxic-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("Teleriscaldamento"))
         {
-            this.icon = { url: './assets/img/internet-explorer-16.ico' };
+            this.icon = { url: './assets/img/water-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("RSU"))
         {
-            this.icon = { url: './assets/img/laptop-4-16.ico' };
+            this.icon = { url: './assets/img/trash-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("liquide"))
         {
-            this.icon = { url: './assets/img/pickup-16.ico' };
+            this.icon = { url: './assets/img/smoke-explosion-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("NULL"))
         {
-            this.icon = { url: './assets/img/pizza-3-16.ico' };
+            this.icon = { url: './assets/img/sad-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("GPL"))
         {
-            this.icon = { url: './assets/img/planet-16.ico' };
+            this.icon = { url: './assets/img/gas-pump-48.ico' };
              this.label = "";
         }
-        if(this.label.includes(""))
+        if(this.label.includes("Gasolio"))
         {
-            this.icon = { url: './assets/img/robot-16.ico' };
+            this.icon = { url: './assets/img/gas-48.ico' };
              this.label = "";
         }
-
     }
   }
