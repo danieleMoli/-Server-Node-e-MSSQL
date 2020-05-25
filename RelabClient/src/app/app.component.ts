@@ -23,7 +23,9 @@ export class AppComponent implements OnInit {
   lat: number = 45.45227445505016;
   obsCiVett : Observable<Ci_vettore[]>;
   markers: Marker [];
- circleLat : number = 0; //Latitudine e longitudine iniziale del cerchio
+
+
+  circleLat : number = 0; //Latitudine e longitudine iniziale del cerchio
   circleLng: number = 0;
   maxRadius: number = 400; //Voglio evitare raggi troppo grossi
   radius : number = this.maxRadius; //Memorizzo il raggio del cerchio
@@ -37,7 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.obsGeoData = this.http.get<GeoFeatureCollection>("https://3000-aa55bbd8-ef41-4766-8c96-214f81f498dc.ws-eu01.gitpod.io/");
+    this.obsGeoData = this.http.get<GeoFeatureCollection>("https://3000-a5b1a70e-864d-4dc0-a87c-545de54e811f.ws-eu01.gitpod.io/");
     this.obsGeoData.subscribe(this.prepareData);
     //Rimuovi la chiamata http a `TUO_URL/ci_vettore/${val}`
   }
@@ -45,9 +47,9 @@ export class AppComponent implements OnInit {
   //Questo metodo richiama la route sul server che recupera il foglio specificato nella casella di testo
   cambiaFoglio(foglio) : boolean
   {
-    let val = foglio.value; //Commenta qui
-    this.obsCiVett = this.http.get<Ci_vettore[]>(`https://3000-aa55bbd8-ef41-4766-8c96-214f81f498dc.ws-eu01.gitpod.io/ci_vettore/${val}`);  //Commenta qui
-    this.obsCiVett.subscribe(this.prepareCiVettData); //Commenta qui
+    let val = foglio.value; //commenta qui :la variabile val prende il valore del nostro foglio
+    this.obsCiVett = this.http.get<Ci_vettore[]>(`https://3000-a5b1a70e-864d-4dc0-a87c-545de54e811f.ws-eu01.gitpod.io/ci_vettore/${val}`);  //Commenta qui: richiesta http.get al server
+    this.obsCiVett.subscribe(this.prepareCiVettData); //commenta qui :lanciamo il metodo prepareCiVettData dopo l'arrivo dei dati
     console.log(val);
     return false;
   }
@@ -74,10 +76,11 @@ export class AppComponent implements OnInit {
       lngTot += m.lng;
       this.markers.push(m);
     }
-    this.lng = lngTot/data.length; //Commenta qui
+    this.lng = lngTot/data.length; //commenta qui: utilizziamo la media per centrare la nostra mappa
     this.lat = latTot/data.length;
     this.zoom = 16;
   }
+
   mapClicked($event: MouseEvent) {
     this.circleLat = $event.coords.lat; //Queste sono le coordinate cliccate
     this.circleLng = $event.coords.lng; //Sposto il centro del cerchio qui
