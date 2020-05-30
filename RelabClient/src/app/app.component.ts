@@ -29,26 +29,27 @@ export class AppComponent implements OnInit {
   circleLng: number = 0;
   maxRadius: number = 400; //Voglio evitare raggi troppo grossi
   radius : number = this.maxRadius; //Memorizzo il raggio del cerchio
+  serverUrl : string = "https://3000-d5ff2675-c541-4ceb-b70a-45b8e4a7e111.ws-eu01.gitpod.io/";
+
 
   constructor(public http: HttpClient) {
   }
 
   prepareData = (data: GeoFeatureCollection) => {
     this.geoJsonObject = data
-    console.log(this.geoJsonObject)
+    console.log(this.geoJsonObject);
   }
 
   ngOnInit() {
-    this.obsGeoData = this.http.get<GeoFeatureCollection>("https://3000-a5b1a70e-864d-4dc0-a87c-545de54e811f.ws-eu01.gitpod.io/");
-    this.obsGeoData.subscribe(this.prepareData);
-    //Rimuovi la chiamata http a `TUO_URL/ci_vettore/${val}`
+    //this.obsGeoData = this.http.get<GeoFeatureCollection>("http://localhost:3000");
+    //this.obsGeoData.subscribe(this.prepareData);
   }
 
   //Questo metodo richiama la route sul server che recupera il foglio specificato nella casella di testo
   cambiaFoglio(foglio) : boolean
   {
     let val = foglio.value; //commenta qui :la variabile val prende il valore del nostro foglio
-    this.obsCiVett = this.http.get<Ci_vettore[]>(`https://3000-a5b1a70e-864d-4dc0-a87c-545de54e811f.ws-eu01.gitpod.io/ci_vettore/${val}`);  //Commenta qui: richiesta http.get al server
+    this.obsCiVett = this.http.get<Ci_vettore[]>(`https://3000-d5ff2675-c541-4ceb-b70a-45b8e4a7e111.ws-eu01.gitpod.io/ci_vettore/${val}`);  //Commenta qui: richiesta http.get al server
     this.obsCiVett.subscribe(this.prepareCiVettData); //commenta qui :lanciamo il metodo prepareCiVettData dopo l'arrivo dei dati
     console.log(val);
     return false;
@@ -57,9 +58,41 @@ export class AppComponent implements OnInit {
   styleFunc = (feature) => {
     return ({
       clickable: false,
-      fillColor: this.fillColor,
-      strokeWeight: 1
+      fillColor: this.avgColorMap(feature.i.media),
+      strokeWeight: 1,
+      fillOpacity : 1  //Fill opacity 1 = opaco (i numeri tra 0 e 1 sono le gradazioni di trasparenza)
     });
+  }
+  avgColorMap = (media) =>
+  {
+    if(media <= 36) return "#00FF00";
+    if(36 < media && media <= 40) return "#33ff00";
+    if(40 < media && media <= 58) return "#66ff00";
+    if(58 < media && media <= 70) return "#99ff00";
+    if(70 < media && media <= 84) return "#ccff00";
+    if(84 < media && media <= 100) return "#FFFF00";
+    if(100 < media && media <= 116) return "#FFCC00";
+    if(116 < media && media <= 1032) return "#ff9900";
+    if(1032 < media && media <= 1068) return "#ff6600";
+    if(1068 < media && media <= 1948) return "#FF3300";
+    if(1948 < media && media <= 3780) return "#FF0000";
+    return "#FF0000"
+  }
+  //mappa scala di verdi
+  avgColorMapGreen = (media) =>
+  {
+    if(media <= 36) return "#EBECDF";
+    if(36 < media && media <= 40) return "#DADFC9";
+    if(40 < media && media <= 58) return "#C5D2B4";
+    if(58 < media && media <= 70) return "#ADC49F";
+    if(75 < media && media <= 84) return "#93B68B";
+    if(84 < media && media <= 100) return "#77A876";
+    if(100 < media && media <= 116) return "#629A6C";
+    if(116 < media && media <= 1032) return "#558869";
+    if(1032 < media && media <= 1068) return "#487563";
+    if(1068 < media && media <= 1948) return "#3B625B";
+    if(1948 < media && media <= 3780) return "#2F4E4F";
+    return "#003000" //Quasi nero
   }
 
   prepareCiVettData = (data: Ci_vettore[]) =>
@@ -99,33 +132,43 @@ circleRedim(newRadius : number){
 
 
 
-//Aggiungi il gestore del metodo circleDblClick
 circleDoubleClicked(circleCenter)
   {
     console.log(circleCenter); //Voglio ottenere solo i valori entro questo cerchio
     console.log(this.radius);
-
-    this.circleLat = circleCenter.coords.lat; //Aggiorno le coordinate del cerchio
-    this.circleLng = circleCenter.coords.lng; //Aggiorno le coordinate del cerchio
-
-    //Non conosco ancora le prestazioni del DB, non voglio fare ricerche troppo onerose
+    this.circleLat = circleCenter.coords.lat;
+    this.circleLng = circleCenter.coords.lng;
     if(this.radius > this.maxRadius)
     {
       console.log("area selezionata troppo vasta sarà reimpostata a maxRadius");
-       this.radius = this.maxRadius;
+      this.radius = this.maxRadius;
     }
-    console.log ("raggio in gradi " + (this.radius * 0.00001)/1.1132)
 
-    //Voglio spedire al server una richiesta che mi ritorni tutte le abitazioni all'interno del cerchio
     let raggioInGradi = (this.radius * 0.00001)/1.1132;
-//Posso riusare lo stesso observable e lo stesso metodo di gestione del metodo
-//cambiaFoglio poichè riceverò lo stesso tipo di dati
-//Divido l'url andando a capo per questioni di leggibilità non perchè sia necessario
-    this.obsCiVett = this.http.get<Ci_vettore[]>(`https://3000-aa55bbd8-ef41-4766-8c96-214f81f498dc.ws-eu01.gitpod.io/ci_geovettore/
+
+
+    const urlciVett = `${this.serverUrl}/ci_geovettore/
     ${this.circleLat}/
     ${this.circleLng}/
-    ${raggioInGradi}`);
+    ${raggioInGradi}`;
+
+    const urlGeoGeom = `${this.serverUrl}/geogeom/
+    ${this.circleLat}/
+    ${this.circleLng}/
+    ${raggioInGradi}`;
+    //Posso riusare lo stesso observable e lo stesso metodo di gestione del metodo cambiaFoglio
+    //poichè riceverò lo stesso tipo di dati
+    //Divido l'url andando a capo per questioni di leggibilità non perchè sia necessario
+    this.obsCiVett = this.http.get<Ci_vettore[]>(urlciVett);
     this.obsCiVett.subscribe(this.prepareCiVettData);
+
+    this.obsGeoData = this.http.get<GeoFeatureCollection>(urlGeoGeom);
+    this.obsGeoData.subscribe(this.prepareData);
+
+    //console.log ("raggio in gradi " + (this.radius * 0.00001)/1.1132)
+
+    //Voglio spedire al server una richiesta che mi ritorni tutte le abitazioni all'interno del cerchio
+
   }
 
 }
