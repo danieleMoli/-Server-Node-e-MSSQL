@@ -20,12 +20,14 @@ module.exports = class SqlUtils {
     });
 }
 
+    
     static makeSqlRequest(req, res) {
         let sqlRequest = new sql.Request();  //sqlRequest: oggetto che serve a eseguire le query
         let q = 'SELECT DISTINCT TOP (100) [WKT] FROM [Katmai].[dbo].[intMil4326WKT]';
         //eseguo la query e aspetto il risultato nella callback
         sqlRequest.query(q, (err, result) => {SqlUtils.sendQueryResults(err,result,res)}); 
     }
+
     
     static sendQueryResults(err,result, res)
     {
@@ -42,12 +44,15 @@ module.exports = class SqlUtils {
         sqlRequest.query(q, (err, result) => {SqlUtils.sendCiVettReult(err,result,res)}); 
     }
 
+
   static sendCiVettReult(err,result, res)
   {
         if (err) console.log(err); // ... error checks
         res.send(result.recordset);  //Invio il risultato al Browser
   }
-  static ciVettGeoRequest(req,res) {
+
+  
+static ciVettGeoRequest(req,res) {
         let sqlRequest = new sql.Request();  //sqlRequest: oggetto che serve a eseguire le query
         let x = Number(req.params.lng);
         let y = Number(req.params.lat);
@@ -60,11 +65,16 @@ module.exports = class SqlUtils {
         WGS84_Y < ${y} + ${r}`
         
         console.log(q);
-        //eseguo la query e aspetto il risultato nella callback
+        
         sqlRequest.query(q, (err, result) => {SqlUtils.sendCiVettReult(err,result,res)}); 
     }
-    static geoGeomRequest(req, res) {
-        let sqlRequest = new sql.Request();  //sqlRequest: oggetto che serve a eseguire le query
+
+//specifichiamo l'oggetto per eseguire la query e dentro la variabile q facciamo la doppia select
+//cambiamo la tabella dalla quale prendiamo le informazioni ovvero intMil4326WKT
+//la quantità EPH,nd è l’indice di prestazione termica utile per climatizzazione invernale
+
+static geoGeomRequest(req, res) {
+        let sqlRequest = new sql.Request();  
         let x = Number(req.params.lng);
         let y = Number(req.params.lat);
         let r = Number(req.params.r);
@@ -84,4 +94,5 @@ module.exports = class SqlUtils {
         //eseguo la query e aspetto il risultato nella callback
         sqlRequest.query(q, (err, result) => { SqlUtils.sendQueryResults(err, result, res) });
     }
+
 }

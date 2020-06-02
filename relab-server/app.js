@@ -2,9 +2,12 @@ const express = require('express');
 const app = new express();
 const cors = require('cors');
 
-app.use(new cors());
+
+
 //Importo la classe per le chiamate al DB
 const sqlUtils = require('./SqlUtils.js'); 
+
+app.use(new cors());
 
 app.get('/', function (req, res) {
    //Per connettermi al DB uso il metodo statico sqlUtils.connect
@@ -22,13 +25,16 @@ app.get('/ci_vettore/:foglio', function (req, res) {
     //richiamo il metodo che ottiene l'elenco dei vettori energetici
     sqlUtils.connect(req,res, sqlUtils.ciVettRequest);
  });
+
  app.get('/ci_geovettore/:lng/:lat/:r', function (req, res) {
     console.log(req.params);
     //richiamo il metodo che ottiene l'elenco dei vettori energetici
     sqlUtils.connect(req, res, sqlUtils.ciVettGeoRequest);
  });
- 
- app.get('/geogeom/:lng/:lat/:r', function (req, res) {
+
+ //richiamiamo il metodo geoGeomRequest
+app.get('/geogeom/:lng/:lat/:r', function (req, res) {
      //richiamo il metodo che ottiene l'elenco dei vettori energetici
     sqlUtils.connect(req, res, sqlUtils.geoGeomRequest);
  });
+
